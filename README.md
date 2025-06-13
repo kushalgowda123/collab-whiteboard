@@ -1,71 +1,69 @@
-🧠 Collaborative Whiteboard Application
+# 🧠 Collaborative Whiteboard Application
 
-A full-featured real-time collaborative whiteboard app built using the MERN stack with secure, token-based invite links, admin dashboard management, persistent canvas storage, and socket.io-powered real-time drawing sync.
+A real-time collaborative whiteboard web app built using the MERN stack with secure, token-based invite links, admin dashboard management, and persistent canvas storage.
 
-⸻
+---
 
-🌐 Access from Any Device (LAN Ready)
+## 🌐 Live Access (LAN Usage)
 
-To access this project from other devices (like your phone or another PC on the same Wi-Fi network), use your machine’s local IP address instead of localhost, e.g.:
+* Use your local IP (e.g. `http://192.168.31.182:5173`) instead of `localhost` when accessing from other devices on the same Wi-Fi network.
 
-http://192.168.31.182:5173
+---
 
+## 📁 Features
 
-⸻
+### ✅ Admin Dashboard
 
-✨ Features
+* Create whiteboard sessions by ID
+* Send email invites with secure JWT tokens
+* View and manage boards
+* Download any whiteboard as an image (`.png`)
 
-✅ Admin Dashboard (Modular & Replaceable)
-	•	Invite users to boards via email using JWT-based links
-	•	Manage multiple boards
-	•	View and open specific boards by ID
-	•	Download board content as .png
-	•	Easily separable: The Admin Dashboard UI can be modularized or deployed independently without impacting the collaborative whiteboard system.
+### ✅ Collaborative Whiteboard
 
-✅ Whiteboard Canvas
-	•	Real-time multi-user drawing with socket.io
-	•	Pen, Eraser, and Text input tools
-	•	Adjustable brush size and color picker
-	•	Auto-save canvas every few seconds
-	•	Load board content based on board ID
-	•	Drawing data scoped by board using socket.join()
+* Real-time drawing sync via socket.io
+* Multiple brush sizes
+* Pen, eraser, and text tools
+* Canvas automatically saved per board
+* Token-authenticated board access
+* Canvas data loaded on refresh
 
-✅ Invite System
-	•	Secure email invitations using JWT
-	•	Invite token includes sender & receiver identity and board ID
-	•	Invite links expire in 1 hour
-	•	Token auto-verifies and renders board for invited users
+### ✅ Invite System
 
-✅ Download & Persistence
-	•	Boards are saved and loaded based on board ID
-	•	Can download .png of current board state
-	•	Saved boards are stored as image files in the backend
+* Secure invite link via email using JWT
+* Links contain encoded board ID and sender/receiver
+* Auto-verification on open
+* Invited users see admin name and can access whiteboard directly
 
-✅ LAN & Cross-Device Access
-	•	Works seamlessly across devices on the same Wi-Fi network
-	•	Supports React Dev Server and Express server over local IP
+### ✅ LAN Access
 
-⸻
+* Fully accessible from any device on the same Wi-Fi (e.g. phones, tablets)
+* Uses local IP + port
 
-🏗️ Tech Stack
-	•	Frontend: React (Vite), Tailwind CSS
-	•	Backend: Node.js, Express.js
-	•	Real-Time Communication: socket.io
-	•	Email Service: nodemailer with Gmail
-	•	Auth: JWT-based invite tokens
-	•	Storage: PNG snapshots stored locally on server
+---
 
-⸻
+## 📦 Tech Stack
 
-🛠️ Setup & Development
+* **Frontend:** React (Vite), Tailwind CSS
+* **Backend:** Node.js, Express
+* **Socket Communication:** socket.io
+* **Email:** nodemailer (Gmail)
+* **Database:** Optional (in-memory/file-based board storage)
 
-1. Clone the Repository
+---
 
+## 🛠️ Setup Instructions
+
+### 1. Clone the repository
+
+```bash
 git clone https://github.com/your-username/whiteboard-app.git
 cd whiteboard-app
+```
 
-2. Install Dependencies
+### 2. Install dependencies
 
+```bash
 # Backend
 cd api
 npm install
@@ -73,26 +71,32 @@ npm install
 # Frontend
 cd ../client
 npm install
+```
 
-3. Setup Environment Variables
+### 3. Configure environment variables
 
-In api/.env:
+Create a `.env` file in the `api/` directory:
 
+```env
 PORT=3000
-JWT_SECRET=your_jwt_secret_key
+JWT_SECRET=your_jwt_secret
 EMAIL=your_gmail@gmail.com
 EMAIL_PASS=your_app_password
+```
 
-4. Enable LAN Support
+### 4. Enable LAN access
 
-In api/index.js:
+#### Backend (`api/index.js`)
 
+```js
 server.listen(process.env.PORT, '0.0.0.0', () => {
   console.log(`Server running on ${process.env.PORT}`);
 });
+```
 
-In vite.config.js:
+#### Frontend (`vite.config.js`)
 
+```js
 server: {
   host: true,
   port: 5173,
@@ -104,23 +108,25 @@ server: {
     }
   }
 }
+```
 
-5. Run the Application
+### 5. Run the app
 
-# Terminal 1 - Start the backend
+```bash
+# Terminal 1: Start backend
 cd api
 npm run dev
 
-# Terminal 2 - Start the frontend
+# Terminal 2: Start frontend
 cd ../client
 npm run dev -- --host
+```
 
-Then access: http://192.168.31.182:5173 from any device on the same network.
+---
 
-⸻
+## 📤 Folder Structure
 
-📁 Folder Structure
-
+```
 whiteboard-app/
 ├── api/
 │   ├── routes/
@@ -129,7 +135,6 @@ whiteboard-app/
 │   │   └── whiteboard.js
 │   ├── socket.js
 │   ├── index.js
-│   ├── .env
 ├── client/
 │   ├── src/
 │   │   ├── pages/
@@ -139,47 +144,36 @@ whiteboard-app/
 │   │   ├── utils/
 │   │   │   └── socket.js
 │   ├── vite.config.js
+```
 
+---
 
-⸻
+## ✂️ Customization Tips
 
-🔒 Security
-	•	All invite links use JWT and expire after 1 hour
-	•	Only invited users can access a board via the token
-	•	Token includes boardId, sender email, receiver email, and sender name
-	•	Boards are private — no public listing
+* You can **separate the Admin Dashboard** UI into a completely different route or repo without affecting the whiteboard functionality.
+* Whiteboards are uniquely identified by `boardId`, so you can embed them anywhere securely using tokens.
+* Invite flow can be integrated with any existing login system if needed.
 
-⸻
+---
 
-🔧 Customization
+## 🔐 Security Notes
 
-✅ Admin Dashboard Can Be Split
+* All invite links are signed JWTs and expire in 1 hour
+* Only users with a valid token can join a board
+* Boards are not listed publicly (access is token-based)
 
-The AdminDashboard.jsx is built in a modular way — it can be:
-	•	Extracted into a separate UI/project
-	•	Replaced with a different UI entirely
-	•	Embedded into any internal tool (e.g. CRM, dashboard)
+---
 
-✅ The Whiteboard is Standalone
+## 📧 Author
 
-The collaborative WhiteboardCanvas.jsx works purely based on boardId and a valid token. It does not depend on the admin interface.
+**Kushal MK**
+Email: [kush43856@gmail.com](mailto:kush43856@gmail.com)
+ID: 221ME130
 
-⸻
+---
 
-📧 Developer Info
+## 📸 Example Invite Link (LAN):
 
-Author: Kushal MK
-Email: kushalgowda44664@gmail.com
-
-⸻
-
-🔗 Sample Invite Link (use LAN IP on other devices)
-
+```
 http://192.168.31.182:5173/board/3?token=eyJhbGciOi...
-
-
-⸻
-
-✅ Final Notes
-
-This project is built to be secure, lightweight, and highly modular. Feel free to fork, extend, or rebrand the Admin Dashboard independently from the whiteboard logic. It’s an ideal foundation for collaborative tools, ed-tech platforms, or internal team brainstorming utilities.
+```
